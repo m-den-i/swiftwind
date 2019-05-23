@@ -16,6 +16,7 @@ install:
 - pip install .
 - pip uninstall -y django-hordak
 - pip install pytest coveralls freezegun $HORDAK_INSTALL_ARGS
+- pip install -q django==$DJANGO_VERSION
 script:
 - env
 - env PYTHONPATH=`pwd` coverage run --source=swiftwind ./manage.py test
