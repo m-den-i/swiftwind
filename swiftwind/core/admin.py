@@ -5,6 +5,4 @@ import swiftwind.settings.models
 from . import models
 
 
-@admin.register(swiftwind.settings.models.Settings)
-class SettingsAdmin(admin.ModelAdmin):
-    pass
+

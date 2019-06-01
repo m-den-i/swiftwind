@@ -1,2 +1,2 @@
 .
-git+https://git@github.com/adamcharnock/django-hordak.git@2116230#egg=django-hordak
+-e git+https://git@github.com/adamcharnock/django-hordak.git@1.8.3#egg=django-hordak

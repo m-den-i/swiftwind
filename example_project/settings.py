@@ -16,6 +16,8 @@ import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from moneyed import BYN, USD, EUR
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -206,3 +208,5 @@ LOGGING = {
         },
     },
 }
+
+CURRENCIES = [c.code for c in (BYN, USD, EUR)]

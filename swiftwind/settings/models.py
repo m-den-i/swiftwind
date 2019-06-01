@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
@@ -17,6 +18,25 @@ class SettingsManager(models.Manager):
             return super(SettingsManager, self).create()
 
 
+class ChoiceArrayField(ArrayField):
+    """
+    A field that allows us to store an array of choices.
+    Uses Django's Postgres ArrayField
+    and a MultipleChoiceField for its formfield.
+    """
+
+    def formfield(self, **kwargs):
+        defaults = {
+            'form_class': forms.MultipleChoiceField,
+            'choices': self.base_field.choices,
+        }
+        defaults.update(kwargs)
+        # Skip our parent's formfield implementation completely as we don't
+        # care for it.
+        # pylint:disable=bad-super-call
+        return super(ArrayField, self).formfield(**defaults)
+
+
 class Settings(models.Model):
     """Store application-wide settings
 
@@ -26,9 +46,10 @@ class Settings(models.Model):
     be the Django convention), as a single model holds many settings.
     """
     default_currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default='EUR')
-    additional_currencies = ArrayField(base_field=models.CharField(choices=CURRENCY_CHOICES, default=[], max_length=3),
-                                       choices=CURRENCY_CHOICES,  # needed?
-                                       default=[], blank=True)
+    additional_currencies = ChoiceArrayField(base_field=models.CharField(choices=CURRENCY_CHOICES, default=[], max_length=3),
+                                             #choices=CURRENCY_CHOICES,  # needed?
+                                             default=[],
+                                             blank=True)
     payment_information = models.TextField(default='', blank=True,
                                            help_text='Enter information on how payment should be made, such as the '
                                                      'bank account details housemates should pay into.')
